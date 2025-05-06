@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carbon Footprint Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label, select, input {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .graphic {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .graphic img {
+            max-width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Carbon Footprint Calculator</h2>
+        <label for="vehicle">Vehicle Type:</label>
+        <select id="vehicle">
+            <option value="car">Car</option>
+            <option value="bus">Bus</option>
+            <option value="motorcycle">Motorcycle</option>
+            <option value="truck">Truck</option>
+            <option value="train">Train</option>
+        </select>
+
+        <label for="fuel">Fuel Type:</label>
+        <select id="fuel">
+            <option value="petrol">Petrol</option>
+            <option value="diesel">Diesel</option>
+            <option value="electric">Electric</option>
+        </select>
+
+        <label for="distance">Distance (km):</label>
+        <input type="number" id="distance" min="0" />
+
+        <button onclick="calculateFootprint()">Calculate</button>
+
+        <div class="result" id="result"></div>
+        <div class="graphic" id="graphic"></div>
+    </div>
+
+    <script>
+        const emissionFactors = {
+            car: { petrol: 0.192, diesel: 0.171, electric: 0.050 },
+            bus: { diesel: 0.105, electric: 0.030 },
+            motorcycle: { petrol: 0.103 },
+            truck: { diesel: 0.250 },
+            train: { diesel: 0.045, electric: 0.035 },
+        };
+
+        function calculateFootprint() {
+            const vehicle = document.getElementById('vehicle').value;
+            const fuel = document.getElementById('fuel').value;
+            const distance = parseFloat(document.getElementById('distance').value);
+            const resultDiv = document.getElementById('result');
+            const graphicDiv = document.getElementById('graphic');
+
+            const factor = emissionFactors[vehicle]?.[fuel];
+            if (factor === undefined || isNaN(distance) || distance < 0) {
+                resultDiv.textContent = 'Invalid input. Please check values.';
+                graphicDiv.innerHTML = '';
+                return;
+            }
+
+            const emissions = (factor * distance).toFixed(2);
+            resultDiv.textContent = `Estimated CO₂ emissions: ${emissions} kg`;
+            graphicDiv.innerHTML = `<img src="https://img.icons8.com/clouds/100/000000/earth-planet.png" alt="Earth Icon">`;
+        }
+    </script>
+</body>
+</html>
